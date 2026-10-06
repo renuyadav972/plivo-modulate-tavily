@@ -38,13 +38,14 @@ from pipecat.frames.frames import (
     TranscriptionFrame,
 )
 from pipecat.processors.frame_processor import FrameDirection, FrameProcessor
-from pipecat.services.stt_service import WebsocketSTTService
+from pipecat.services.stt_service import STTSettings, WebsocketSTTService
 from pipecat.transcriptions.language import Language
 from pipecat.utils.time import time_now_iso8601
 
 import events
 from behaviors import GUARDRAIL_BEHAVIORS
 
+VELMA_MODEL = "velma-2"
 VELMA_URL = "wss://platform.modulate.ai/api/velma-2-streaming"
 SVD_URL = "wss://platform.modulate.ai/api/velma-2-synthetic-voice-detection-streaming"
 
@@ -140,7 +141,14 @@ class ModulateSTTService(WebsocketSTTService):
         sample_rate: int | None = None,
         **kwargs,
     ):
-        super().__init__(sample_rate=sample_rate, **kwargs)
+        # Velma-2 auto-detects language and exposes no model selector, so
+        # language is explicitly None rather than left NOT_GIVEN; the base
+        # class logs a warning for every settings field without a real value.
+        super().__init__(
+            sample_rate=sample_rate,
+            settings=STTSettings(model=VELMA_MODEL, language=None),
+            **kwargs,
+        )
         self._api_key = api_key
         self._behaviors = behaviors if behaviors is not None else GUARDRAIL_BEHAVIORS
         self._behavior_threshold = behavior_threshold
