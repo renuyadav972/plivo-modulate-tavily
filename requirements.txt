@@ -1,0 +1,14 @@
+# quickstart only needs these three
+fastapi[all]
+uvicorn
+python-dotenv
+loguru
+
+# guardrail snippets
+websockets
+tavily-python
+requests
+
+# reference agent
+pipecat-ai[websocket,silero,deepgram,cartesia,openai]
+plivo

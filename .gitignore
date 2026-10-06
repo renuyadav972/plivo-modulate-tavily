@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+samples/*.wav
+samples/*.mp3
+!samples/README.md
+
+# internal, never publish
+deck/
+docs/talk.md
